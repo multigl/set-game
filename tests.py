@@ -113,8 +113,9 @@ def test_valid_set(cards, is_set):
     assert sets.valid_set(cards) == is_set
 
 
-def test_find_sets():
-    deck = [
+@pytest.fixture()
+def deck():
+    return [
         sets.Card.from_raw('blue #'),
         sets.Card.from_raw('green $'),
         sets.Card.from_raw('blue AA'),
@@ -132,6 +133,8 @@ def test_find_sets():
         sets.Card.from_raw('green @'),
     ]
 
+
+def test_find_sets(deck):
     expected_sets = [
         {sets.Card.from_raw('blue #'), sets.Card.from_raw('green $'), sets.Card.from_raw('yellow @')},
         {sets.Card.from_raw('blue a'), sets.Card.from_raw('blue AA'), sets.Card.from_raw('blue @@@')},
@@ -141,5 +144,19 @@ def test_find_sets():
 
     found_sets = sets.find_sets(deck)
     assert len(found_sets) == 9
+    for expected_set in expected_sets:
+        assert expected_set in found_sets
+
+
+def test_find_disjoint_sets(deck):
+    expected_sets = [
+        {sets.Card.from_raw('blue #'), sets.Card.from_raw('green $'), sets.Card.from_raw('yellow @')},
+        {sets.Card.from_raw('blue a'), sets.Card.from_raw('blue AA'), sets.Card.from_raw('blue @@@')},
+        {sets.Card.from_raw('green a'), sets.Card.from_raw('green A'), sets.Card.from_raw('green @')},
+        {sets.Card.from_raw('yellow #'), sets.Card.from_raw('yellow @@'), sets.Card.from_raw('yellow $$$')}
+    ]
+
+    found_sets = sets.find_disjoint_sets(deck)
+    assert len(found_sets) == 4
     for expected_set in expected_sets:
         assert expected_set in found_sets

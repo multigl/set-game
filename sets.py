@@ -63,13 +63,21 @@ def valid_set(cards: typing.Set[Card]) -> bool:
     return colors and symbols and shades and numbers
 
 
-def find_sets(cards: typing.List[Card]) -> typing.List[typing.Set[Card]]:
+def find_sets(deck: typing.List[Card]) -> typing.List[typing.Set[Card]]:
     sets = []
 
-    for combo in itertools.combinations(cards, 3):
+    for combo in itertools.combinations(deck, 3):
         combo = set(combo)
         if not valid_set(combo):
             continue
         sets.append(combo)
 
     return sets
+
+
+def find_disjoint_sets(deck: typing.List[typing.Set[Card]]) -> typing.List[typing.Set[Card]]:
+    all_sets = find_sets(deck)
+
+    # TODO disjoint algorithm
+
+    return all_sets
