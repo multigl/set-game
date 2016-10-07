@@ -75,9 +75,16 @@ def find_sets(deck: typing.List[Card]) -> typing.List[typing.Set[Card]]:
     return sets
 
 
-def find_disjoint_sets(deck: typing.List[typing.Set[Card]]) -> typing.List[typing.Set[Card]]:
-    all_sets = find_sets(deck)
-
-    # TODO disjoint algorithm
-
-    return all_sets
+def find_disjoint_sets(deck: typing.List[Card]) -> typing.List[typing.Set[Card]]:
+    all_sets = find_sets(deck)  # find all of the sets
+    disjoint_sets = [all_sets.pop()]  # put the first found set into the collection
+    
+    for found_set in all_sets:
+        disjoint = True  # presume this set is disjoint
+        for comparison_set in disjoint_sets:  # compare to all known disjoint sets
+            if not found_set.isdisjoint(comparison_set):
+                disjoint = False
+        if disjoint:
+            disjoint_sets.append(found_set)
+             
+    return disjoint_sets

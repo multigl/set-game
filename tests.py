@@ -155,7 +155,6 @@ def test_find_disjoint_sets(deck):
         {sets.Card.from_raw('green a'), sets.Card.from_raw('green A'), sets.Card.from_raw('green @')},
         {sets.Card.from_raw('yellow #'), sets.Card.from_raw('yellow @@'), sets.Card.from_raw('yellow $$$')}
     ]
-
     found_sets = sets.find_disjoint_sets(deck)
     assert len(found_sets) == 4
     for expected_set in expected_sets:
