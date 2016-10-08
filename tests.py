@@ -159,3 +159,27 @@ def test_find_disjoint_sets(deck):
     assert len(found_sets) == 4
     for expected_set in expected_sets:
         assert expected_set in found_sets
+
+
+@pytest.fixture()
+def full_deck():
+    cards = []
+    
+    for number in {1, 2, 3}:
+        for color in sets.Colors:
+            for shade in sets.Shades:
+                for symbol in sets.Symbols:
+                    cards.append(sets.Card(color, symbol, shade, number))
+    
+    return cards
+
+
+def test_full_deck(full_deck):
+    found_sets = sets.find_sets(full_deck)
+    # 81 cards, (81 * 80) / 3!
+    assert len(found_sets) == 1080
+
+
+def test_full_deck_disjoint(full_deck):
+    found_sets = sets.find_disjoint_sets(full_deck)
+    assert len(found_sets) == 27

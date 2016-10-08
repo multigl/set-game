@@ -64,26 +64,19 @@ def valid_set(cards: typing.Set[Card]) -> bool:
 
 
 def find_sets(deck: typing.List[Card]) -> typing.List[typing.Set[Card]]:
-    sets = []
-
-    for combo in itertools.combinations(deck, 3):
-        combo = set(combo)
-        if not valid_set(combo):
-            continue
-        sets.append(combo)
-
-    return sets
+    # filter out valid combinations of sets
+    sets = filter(valid_set, itertools.combinations(deck, 3))
+    # convert iterable to a set
+    sets = map(set, sets)
+    # evaluate map, as it returns a generator and we want a list
+    return list(sets)
 
 
 def find_disjoint_sets(deck: typing.List[Card]) -> typing.List[typing.Set[Card]]:
-    all_sets = find_sets(deck)  # find all of the sets
-    disjoint_sets = [all_sets.pop()]  # put the first found set into the collection
-    
-    for found_set in all_sets:
-        disjoint = True  # presume this set is disjoint
-        for comparison_set in disjoint_sets:  # compare to all known disjoint sets
-            if not found_set.isdisjoint(comparison_set):
-                disjoint = False
+    disjoint_sets = []
+
+    for found_set in find_sets(deck):
+        disjoint = all(map(found_set.isdisjoint, disjoint_sets))
         if disjoint:
             disjoint_sets.append(found_set)
              
